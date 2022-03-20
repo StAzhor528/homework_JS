@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Homework</title>
+</head>
+
+<body>
+  <!--
+Обязательное задание.
+
+Необходимо данное задание выполнить в es5 стиле и в es6 стиле.
+Необходимо создать функцию-конструктор/класс для поста в социальной сети.
+Названия: `PostES5` для es5 стиля и `PostES6` для es6 стиля.
+Пост должен хранить:
+1. Автора поста (имени достаточно).
+2. Текст поста.
+3. Дату и время последнего изменения поста.
+Данные автора поста и текст поста необходимо передавать при создании
+экземпляра объекта.
+Каждому экземпляру объекта должен быть доступен метод `edit`, который будет
+менять текст поста.
+
+---
+
+Необходимо создать функцию-конструктор/класс для закрепленного поста в
+социальной сети.
+Названия: `AttachedPostES5` для es5 стиля и `AttachedPostES6` для es6 стиля.
+Закрепленный пост должен наследоваться от обычного поста.
+Данные автора поста и текст поста необходимо передавать при создании
+экземпляра объекта.
+Закрепленный пост должен иметь свойство `highlighted`, в котором по умолчанию
+будет лежать значение false (это свойство будет обозначать, будет ли наш
+закрепленный пост подсвечен).
+У экземпляров объекта закрепленного поста должен быть метод с названием
+`makeTextHighlighted`, который сделает так, чтобы наш пост стал подсвеченным
+(будет менять свойство `highlighted`).
+
+---
+
+Подсказки:
+1. Задание сложное, советую делать по аналогии с примером на онлайн-занятии.
+2. Обратите внимание что пост хранит "дату и время последнего изменения
+поста", это значит что если пост кто-то изменит (например вызовет какой-то
+метод, который изменит что-то в посте), дата и время последнего изменения
+поста также должна измениться.
+3. Выполняйте все по порядку, не стоит пытаться сделать все сразу, иначе можно
+что-нибудь пропустить.
+4. Если непонятно условие - задайте вопрос.
+-->
+  <script>
+    "use strict";
+
+    /**
+     * @construct Функция-конструктор описывающая пост в соц. сети
+     * @property {string} name - Имя автора поста
+     * @property {string} text - Текст поста
+     * @property {string} postLastDate - Время последнего изменения поста
+     */
+    function PostES5(name, text, postLastDate = Date()) {
+      this.name = name;
+      this.text = text;
+      this.postLastDate = postLastDate;
+    }
+
+    /**
+     * Метод, изменяющий текст поста
+     * @param {string} text - Новый текст поста
+     */
+    PostES5.prototype.edit = function (text) {
+      this.text = text;
+      this.postLastDate = Date();
+    }
+
+    /**
+     * @construct Функция-конструктор описывающая закрепленный пост в соц. сети
+     * @extends PostES5
+     * @property {string} name - Имя автора поста
+     * @property {string} text - Текст поста
+     * @property {string} postLastDate - Время последнего изменения поста
+     * @property {boolean} highlighted - Eсли true то пост будет подсвечен.
+     */
+    function AttachedPostES5(name, text, postLastDate = Date(), highlighted = false) {
+      PostES5.call(this, name, text, postLastDate);
+      this.highlighted = highlighted;
+    }
+
+    AttachedPostES5.prototype = Object.create(PostES5.prototype);
+    AttachedPostES5.prototype.constructor = AttachedPostES5;
+
+    /**
+     * Метод, подсвечивающий пост или наоборот, если пост уже был подсвечен.
+     */
+    AttachedPostES5.prototype.makeTextHighlighted = function () {
+      if (this.highlighted === false) {
+        this.highlighted = true;
+        this.postLastDate = Date();
+      } else {
+        this.highlighted = false;
+        this.postLastDate = Date();
+      }
+    }
+
+    let post1 = new PostES5('Иван', 'Привет');
+    console.log('Создание поста в ES5');
+    console.log(`Время создания поста - ${post1.postLastDate}. /
+    Текст поста - ${post1.text}`);
+    setTimeout(() => {
+      console.log(`Время создания поста через секунду - ${post1.postLastDate}`);
+    }, 1000);
+    setTimeout(() => {
+      console.log('Изменение текста поста');
+      post1.edit("Пока");
+    }, 2000);
+    setTimeout(() => { console.log(`Новый текст - ${post1.text}`); }, 3000);
+    setTimeout(() => { console.log(`Время изменения поста - ${post1.postLastDate}`); }, 4000);
+
+    let atPost1 = new AttachedPostES5('Жора', 'Меня зовут Жора');
+    setTimeout(() => {
+      console.log('Создание закрепленного поста в ES5');
+    }, 5000);
+    setTimeout(() => {
+      console.log(`Время создания закрепленного поста - ${atPost1.postLastDate}. /
+    Текст поста - ${atPost1.text}`);
+    }, 6000);
+    setTimeout(() => {
+      console.log(`Время создания закрепленного поста через секунду - ${atPost1.postLastDate}`);
+    }, 7000);
+    setTimeout(() => {
+      console.log('Изменение текста закрепленного поста');
+      atPost1.edit("Меня зовут Григорий");
+    }, 8000);
+    setTimeout(() => { console.log(`Новый текст - ${atPost1.text}`); }, 9000);
+    setTimeout(() => {
+      console.log(`Время изменения закрепленного поста - ${atPost1.postLastDate}`);
+    }, 10000);
+    setTimeout(() => {
+      console.log(`Подсвечиваем пост`);
+      atPost1.makeTextHighlighted();
+      console.log(`${atPost1.highlighted}`);
+    }, 11000);
+    setTimeout(() => {
+      console.log(`Время изменения закрепленного поста - ${atPost1.postLastDate}`);
+    }, 12000);
+  </script>
+</body>
+
+</html>
